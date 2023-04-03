@@ -5,21 +5,32 @@ import static com.example.jogorandom.Dificuldade.dificuldade;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Random;
 import java.util.Scanner;
 
 public class Jogo extends AppCompatActivity {
-    TextView tentativas;
-    int total_tentativas;
+    TextView tentativas, pistas, contadorTentativas, numeroSecreto;
+    int total_tentativas = 0, numerosecretoInt, i = 1, pontos = 1000, pontos_perdidos, chute;
+    String numerosecretoString;
+    Button Botaochute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_jogo2);
+        setContentView(R.layout.activity_jogo);
         tentativas = findViewById(R.id.campotentativas);
+        numeroSecreto = findViewById(R.id.numerosecreto);
+        Botaochute = findViewById(R.id.chute);
+        pistas = findViewById(R.id.campopistas);
+        contadorTentativas = findViewById(R.id.contadortentativas);
         getSupportActionBar().hide();
+
+        numerosecretoInt = new Random().nextInt(100) + 1;
 
         switch(dificuldade){
             case 1:
@@ -32,48 +43,49 @@ public class Jogo extends AppCompatActivity {
                 total_tentativas = 5;
                 break;
         }
-    }
-
-    public void main() {
-
-        Random gerador = new Random();
-        int numero_secreto = gerador.nextInt(100)+1, i = 1, pontos = 1000;
-
-        while(i <= total_tentativas){
-            tentativas.setHint("Tentativa "+i+" De "+ total_tentativas);
-            Scanner sc2 = new Scanner(System.in);
-
-            System.out.println("Dê o seu chute");
-            int chute = Integer.parseInt(sc2.next());
-
-            if(chute < 1){
-                System.out.println("Chute algo acima de 1 ou abaixo de 100");
-                continue;
-            }
-            else if(chute > 100){
-                System.out.println("Chute algo acima de 1 ou abaixo de 100");
-                continue;
-            }
-
-            if(chute == numero_secreto){
-                System.out.println("Você acertou o número!");
-                System.out.println("Sua pontuação foi: "+ pontos);
-                break;
-            }
-            if(chute < numero_secreto){
-                System.out.println("O número secreto é maior");
-                int pontos_perdidos = Math.abs(numero_secreto - chute);
-                pontos = pontos - pontos_perdidos;
-                i++;
-            }
-            if (chute > numero_secreto){
-                System  .out.println("O número secreto é menor");
-                int pontos_perdidos = Math.abs(numero_secreto - chute);
-                pontos = pontos - pontos_perdidos;
-                i++;
-            }
-
+            contadorTentativas.setText("Tentativa "+0+" de "+total_tentativas);
+            pistas.setText("");
         }
-        System.out.println("Fim de Jogo.");
+
+
+    public void chute(View v){
+        if(Botaochute.getText().toString().equals("Tentar de novo?")){
+            super.onBackPressed();
+        }
+        else{
+            try{
+                chute = Integer.parseInt(String.valueOf(tentativas.getText()));
+
+                if(chute < numerosecretoInt){
+                    pistas.setText("O número secreto é maior");
+                    pontos_perdidos = Math.abs(numerosecretoInt - chute);
+                    pontos = pontos - pontos_perdidos;
+                    contadorTentativas.setText("Tentativa "+ (i++) +" de "+total_tentativas);
+                } else if(chute > numerosecretoInt){
+                    pistas.setText("O número secreto é menor");
+                    pontos_perdidos = Math.abs(numerosecretoInt - chute);
+                    pontos = pontos - pontos_perdidos;
+                    contadorTentativas.setText("Tentativa "+ (i++) +" de "+total_tentativas);
+                }
+
+                if(chute == numerosecretoInt) {
+                    numeroSecreto.setText(numerosecretoInt+" :D");
+                    pistas.setText("Você acertou! O valor era "+numerosecretoInt+"!");
+                    Botaochute.setText("Tentar de novo?");
+                    contadorTentativas.setText("Você conseguiu "+pontos+" pontos depois de "+i+" tentativas!");
+                }
+
+                if(i-1 > total_tentativas){
+                    numeroSecreto.setText(numerosecretoInt+" :(");
+                    pistas.setText("Você perdeu! O valor era "+numerosecretoInt+"!");
+                    Botaochute.setText("Tentar de novo?");
+                    contadorTentativas.setText("Tente novamente!");
+                }
+
+
+            }catch (Exception e){
+                Toast.makeText(this, "Insira um valor válido!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
