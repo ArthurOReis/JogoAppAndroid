@@ -59,7 +59,7 @@
 
     <EditText
         android:id="@+id/campotentativas"
-        android:layout_width="242dp"
+        android:layout_width="299dp"
         android:layout_height="94dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
@@ -67,6 +67,7 @@
         android:background="#FFF"
         android:backgroundTint="#FFF"
         android:ems="10"
+        android:hint="Coloque seu chute!"
         android:inputType="number"
         android:textAlignment="center"
         android:textColorHint="@android:color/darker_gray"
@@ -88,6 +89,7 @@
         android:onClick="chute"
         android:text="Chutar"
         android:textAlignment="center"
+        android:textColor="#000"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

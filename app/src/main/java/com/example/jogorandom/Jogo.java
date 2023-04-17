@@ -16,7 +16,6 @@ import java.util.Scanner;
 public class Jogo extends AppCompatActivity {
     TextView tentativas, pistas, contadorTentativas, numeroSecreto;
     int total_tentativas = 0, numerosecretoInt, i = 1, pontos = 1000, pontos_perdidos, chute;
-    String numerosecretoString;
     Button Botaochute;
 
     @Override
